@@ -5,16 +5,17 @@ const express = require('express')
 const app = express()
 const bodyparser = require('body-parser')
 const prisma = new PrismaClient()
+const cors = require('cors')
 
 const env = load({
   PORT: Number
 })
 
 app.use(bodyparser.json())
+app.use(cors())
 
 app.get('/', async (req: any, res: any) => {
-  const result = await prisma.user.findUnique({where: { id: "ec1c66bf-c756-48f4-b019-b12bb9c85f4b" }})
-  res.send(result)
+  const result = await prisma.user.findMany()
   res.send(result)
 });
 
@@ -24,7 +25,7 @@ app.post('/add', async (req: any, res: any) => {
   const result = await prisma.user.create({
     data: user
   })
-  res.send(result)
+  return res.send(result)
 })
 
 app.post('/addPost', async (req: any, res: any) => {
